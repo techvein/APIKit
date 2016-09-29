@@ -89,7 +89,11 @@ public extension RequestType {
     // Use Result here because `throws` loses type info of an error.
     // This method is not overridable. If you need to add customization, override configureURLRequest.
     public func buildURLRequest() -> Result<NSURLRequest, APIError> {
-        let URL = path.isEmpty ? baseURL : baseURL.URLByAppendingPathComponent(path)
+        #if swift(>=2.3)
+          let URL = path.isEmpty ? baseURL : (baseURL.URLByAppendingPathComponent(path) ?? baseURL)
+        #else
+          let URL = path.isEmpty ? baseURL : baseURL.URLByAppendingPathComponent(path)
+        #endif
         guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: true) else {
             return .Failure(.InvalidBaseURL(baseURL))
         }
