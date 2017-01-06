@@ -113,12 +113,12 @@ public extension RequestType {
                     let (contentTypeHeader, body) = try requestBodyBuilder.buildBodyFromObject(parameters)
                     URLRequest.HTTPBody = body
                     URLRequest.setValue(contentTypeHeader, forHTTPHeaderField: "Content-Type")
-                } else if let count = objectParameters.count where count > 0 {
-                    let (contentTypeHeader, body) = try requestBodyBuilder.buildBodyFromObject(objectParameters)
-                    URLRequest.HTTPBody = body
-                    URLRequest.setValue(contentTypeHeader, forHTTPHeaderField: "Content-Type")
-                }
-            } catch {
+                } else if let count = objectParameters.count { if count > 0 {
+                  let (contentTypeHeader, body) = try requestBodyBuilder.buildBodyFromObject(objectParameters)
+                  URLRequest.HTTPBody = body
+                  URLRequest.setValue(contentTypeHeader, forHTTPHeaderField: "Content-Type")
+                } }
+	    } catch {
                 return .Failure(.RequestBodySerializationError(error))
             }
         }
